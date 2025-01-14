@@ -14,15 +14,33 @@
     ],
     "sharedGlobals": []
   },
-  "plugins": [
-    {
-      "plugin": "@nx/webpack/plugin",
+  "targetDefaults": {
+    "@nx/webpack:webpack": {
+      "cache": false,
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
-        "buildTargetName": "build",
-        "serveTargetName": "serve",
-        "previewTargetName": "preview"
+        "outputPath": "dist/{projectRoot}",
+        "main": "{projectRoot}/src/main.ts",
+        "tsConfig": "{projectRoot}/tsconfig.app.json",
+        "webpackConfig": "{projectRoot}/webpack.config.js",
+        "target": "node",
+        "compiler": "tsc",
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "development": {
+          "optimization": false,
+          "sourceMap": true
+        },
+        "production": {
+          "optimization": true,
+          "sourceMap": false
+        }
       }
-    },
+    }
+  },
+  "plugins": [
     {
       "plugin": "@nx/eslint/plugin",
       "options": {

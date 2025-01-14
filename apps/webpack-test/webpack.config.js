@@ -1,5 +1,25 @@
-const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin');
-const { join } = require('path');
+const { env } = require('node:process')
+const { composePlugins, withNx } = require('@nx/webpack')
+const { NxAppWebpackPlugin } = require('@nx/webpack/app-plugin')
+const { join } = require('node:path')
+
+const isDevelopment = env.NODE_ENV === 'development'
+
+
+/* ------------------------------------ */
+/* ------ Breakpoints Issues ---------- */
+/* ------------------------------------ */
+
+module.exports = composePlugins(withNx({}), (config) => {
+  return {
+    ...config,
+    devtool: isDevelopment && 'source-map',
+  }
+})
+
+/* ------------------------------------ */
+/* -------- Reload Issues ------------- */
+/* ------------------------------------ */
 
 module.exports = {
   output: {
@@ -18,3 +38,18 @@ module.exports = {
     }),
   ],
 };
+
+
+/* ------------------------------------ */
+/* -------- Patch solution ------------ */
+/* ------------------------------------ */
+
+// module.exports = composePlugins(withNx({}), (config) => {
+//   delete config.context;
+
+//   return {
+//     ...config,
+//     plugins: [new NxAppWebpackPlugin({})],
+//     devtool: isDevelopment && 'source-map',
+//   };
+// });
